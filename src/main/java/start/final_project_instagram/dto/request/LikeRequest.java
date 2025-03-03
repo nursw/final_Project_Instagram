@@ -1,6 +1,9 @@
 package start.final_project_instagram.dto.request;
 
-public class LikeRequestDto {
-    private Long postId;
-    private Long userId;
+import jakarta.validation.constraints.NotNull;
+
+public record LikeRequest(
+        @NotNull(message = "Like не может быть null")
+        boolean isLike
+) {
 }

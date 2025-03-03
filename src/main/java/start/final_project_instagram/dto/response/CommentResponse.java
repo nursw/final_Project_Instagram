@@ -1,9 +1,8 @@
 package start.final_project_instagram.dto.response;
 
-public class CommentResponseDto {
-        private Long id;
-        private String comment;
-        private String createdAt;
-        private Long postId;
-        private Long userId;
+public record CommentResponse(
+        Long id,
+        String comment,
+        String createdAt
+) {
 }

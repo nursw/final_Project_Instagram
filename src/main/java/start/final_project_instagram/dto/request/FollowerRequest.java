@@ -1,6 +1,12 @@
 package start.final_project_instagram.dto.request;
 
-public class FollowerRequestDto {
-    private Long userId;
-    private Long targetUserId;
+import jakarta.validation.constraints.NotNull;
+
+public record FollowerRequest(
+        @NotNull(message = "Follower ID не может быть null")
+        Long followerId,
+
+        @NotNull(message = "User ID не может быть null")
+        Long userId
+) {
 }

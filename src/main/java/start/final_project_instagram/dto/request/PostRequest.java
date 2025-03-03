@@ -1,10 +1,14 @@
 package start.final_project_instagram.dto.request;
 
-import java.util.List;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-public class PostRequestDto {
-    private String title;
-    private String description;
-    private Long userId;
-    private List<String> taggedUsernames;
+public record PostRequest(
+        @NotBlank(message = "Заголовок не должен быть пустым")
+        @Size(max = 100, message = "Заголовок не должен превышать 100 символов")
+        String title,
+
+        @NotBlank(message = "Описание не должно быть пустым")
+        String description
+) {
 }

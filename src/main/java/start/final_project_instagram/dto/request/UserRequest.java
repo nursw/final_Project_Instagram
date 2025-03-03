@@ -2,20 +2,23 @@ package start.final_project_instagram.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
-@Data
-public class UserRequestDto {
-    @NotBlank(message = "Имя пользователя не должно быть пустым")
-    private String username;
+public record UserRequest(
+        @NotBlank(message = "Username не должен быть пустым")
+        @Size(min = 3, max = 20, message = "Длина username должна быть от 3 до 20 символов")
+        String username,
 
-    @NotBlank(message = "Пароль не должен быть пустым")
-    private String password;
+        @NotBlank(message = "Пароль не должен быть пустым")
+        @Size(min = 8, message = "Пароль должен содержать минимум 8 символов")
+        String password,
 
-    @Email(message = "Некорректный email")
-    private String email;
+        @NotBlank(message = "Email не должен быть пустым")
+        @Email(message = "Неверный формат email")
+        String email,
 
-    @Pattern(regexp = "^\\+996\\d{9}$", message = "Номер телефона должен начинаться с +996 и содержать 13 символов")
-    private String phoneNumber;
+        @NotBlank(message = "Номер телефона не должен быть пустым")
+        @Size(min = 10, max = 15, message = "Номер телефона должен содержать от 10 до 15 символов")
+        String phoneNumber
+) {
 }
