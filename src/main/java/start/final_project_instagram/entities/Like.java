@@ -29,4 +29,7 @@ public class Like {
     @ManyToOne
     @JoinColumn(name = "comment_id", nullable = true)
     Comment comment;
+
+    public Like(Object o, Post post, User user) {
+    }
 }

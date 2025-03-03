@@ -9,6 +9,6 @@ import start.final_project_instagram.entities.User;
 import java.util.List;
 
 @Repository
-public interface ImageRepository extends JpaRepository<User, Long> {
+public interface ImageRepository extends JpaRepository<Image, Long> {
     List<User> findByUsernameOrFullName(String username, String fullName);
 }

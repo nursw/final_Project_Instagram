@@ -3,47 +3,49 @@ package start.final_project_instagram.config.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 import start.final_project_instagram.entities.User;
 import start.final_project_instagram.repositories.UserRepository;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
 @RequiredArgsConstructor
 @Component
-public class JwtFiler {
-    @Value("${security.secret.key}")
-    private String secretKey;
+public class JwtFiler extends OncePerRequestFilter {
+    private final JwtService jwtService;
 
-    private final UserRepository userRepo; // финальный репозиторий
-    private Algorithm algorithm;
+    @Override
+    protected void doFilterInternal(@NotNull HttpServletRequest request,
+                                    @NotNull HttpServletResponse response,
+                                    @NotNull FilterChain filterChain) throws ServletException, IOException, java.io.IOException {
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer ")) {
+            String token = header.substring(7);
+            try {
+                User user = jwtService.verifyToken(token);
+                if (user != null) {
+                    SecurityContextHolder.getContext().setAuthentication(
+                            new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+                    );
+                }
+            }catch (JWTVerificationException exception){
+                throw new RuntimeException(exception);
+            }
 
-    @PostConstruct
-    public void init() {
-        this.algorithm = Algorithm.HMAC256(secretKey);
-    }
-
-    public String generateToken(User user) {
-        ZonedDateTime now = ZonedDateTime.now();
-        return JWT.create()
-                .withClaim("id", user.getId())
-                .withClaim("email", user.getEmail())
-                .withClaim("role", user.getRole().name())
-                .withIssuedAt(now.toInstant())
-                .withExpiresAt(now.plusSeconds(100000000).toInstant())
-                .sign(algorithm);
-    }
-
-    public User verifyToken(String token) {
-        JWTVerifier verifier = JWT.require(algorithm).build();
-        DecodedJWT decodedJWT = verifier.verify(token);
-        String email = decodedJWT.getClaim("email").asString();
-
-        return userRepo.findByEmail(email).orElseThrow(
-                () -> new RuntimeException("User not found with email: " + email)
-        );
+        }
+        filterChain.doFilter(request,response);
     }
 }

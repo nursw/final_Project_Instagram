@@ -7,7 +7,6 @@ public record PostRequest(
         @NotBlank(message = "Заголовок не должен быть пустым")
         @Size(max = 100, message = "Заголовок не должен превышать 100 символов")
         String title,
-
         @NotBlank(message = "Описание не должно быть пустым")
         String description
 ) {

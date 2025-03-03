@@ -63,5 +63,6 @@ public class FollowerServiceImpl implements FollowerService {
     public List<User> getAllSubscriptionsByUserId(Long userId) {
         Follower follower = followerRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Subscriptions not found for user with id " + userId));
-        return follower.getSubscriptions();    }
+        return follower.getSubscriptions();
+    }
 }
