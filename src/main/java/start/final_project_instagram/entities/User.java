@@ -1,12 +1,9 @@
 package start.final_project_instagram.entities;
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import start.final_project_instagram.enums.Role;
-
 import java.util.List;
-
 @Entity
 @Getter
 @Setter
@@ -25,20 +22,14 @@ public class User {
     String phoneNumber;
     @Enumerated(EnumType.STRING)
     Role role;
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     UserInfo userInfo;
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     Follower follower;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Post> posts;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Comment> comments;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Like> likes;
-
 }

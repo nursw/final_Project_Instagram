@@ -1,9 +1,7 @@
 package start.final_project_instagram.entities;
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 @Entity
 @Getter
 @Setter
@@ -17,7 +15,6 @@ public class Image {
     @SequenceGenerator(sequenceName = "image_seq", name = "image_gen")
     Long id;
     String imageUrl;
-
     @ManyToOne
     @JoinColumn(name = "post_id")
     Post post;

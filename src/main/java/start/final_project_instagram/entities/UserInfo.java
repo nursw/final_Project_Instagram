@@ -1,10 +1,8 @@
 package start.final_project_instagram.entities;
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import start.final_project_instagram.enums.Gender;
-
 @Entity
 @Getter
 @Setter
@@ -21,7 +19,6 @@ public class UserInfo {
     String biography;
     Gender gender;
     String image;
-
     @OneToOne
     @JoinColumn(name = "user_id")
     User user;

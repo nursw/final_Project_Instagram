@@ -1,27 +1,22 @@
 package start.final_project_instagram.config.jwt;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import start.final_project_instagram.entities.User;
-import start.final_project_instagram.repositories.UserRepository;
 
 import java.io.IOException;
-import java.time.ZonedDateTime;
+import java.util.Collections;
+
 @RequiredArgsConstructor
 @Component
 public class JwtFiler extends OncePerRequestFilter {
@@ -36,16 +31,17 @@ public class JwtFiler extends OncePerRequestFilter {
             String token = header.substring(7);
             try {
                 User user = jwtService.verifyToken(token);
-                if (user != null) {
-                    SecurityContextHolder.getContext().setAuthentication(
-                            new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
-                    );
-                }
-            }catch (JWTVerificationException exception){
-                throw new RuntimeException(exception);
+                SecurityContextHolder.getContext().setAuthentication(
+                        new UsernamePasswordAuthenticationToken(
+                                user.getUsername(),
+                                null,
+                                Collections.singleton(new SimpleGrantedAuthority(user.getRole().name()))
+                        )
+                );
+            } catch (JWTVerificationException e) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+                return;
             }
-
         }
-        filterChain.doFilter(request,response);
     }
 }

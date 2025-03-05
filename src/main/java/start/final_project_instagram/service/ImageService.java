@@ -1,6 +1,4 @@
 package start.final_project_instagram.service;
-
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import start.final_project_instagram.dto.response.ImageResponse;
 @Service

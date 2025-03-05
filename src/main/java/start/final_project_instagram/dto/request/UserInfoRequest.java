@@ -1,11 +1,9 @@
 package start.final_project_instagram.dto.request;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import start.final_project_instagram.enums.Gender;
-
 public record UserInfoRequest(
         @NotBlank(message = "Полное имя не должно быть пустым")
         @Size(max = 50, message = "Полное имя не должно превышать 50 символов")

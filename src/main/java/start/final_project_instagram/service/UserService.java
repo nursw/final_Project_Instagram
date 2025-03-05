@@ -1,11 +1,8 @@
 package start.final_project_instagram.service;
-
 import org.springframework.stereotype.Service;
 import start.final_project_instagram.dto.request.UserRequest;
 import start.final_project_instagram.dto.response.UserResponse;
-
 import java.util.List;
-
 @Service
 public interface UserService {
     UserResponse signUp(UserRequest userRequest);

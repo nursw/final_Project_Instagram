@@ -1,11 +1,8 @@
 package start.final_project_instagram.service;
-
 import org.springframework.stereotype.Service;
 import start.final_project_instagram.dto.request.PostRequest;
 import start.final_project_instagram.dto.response.PostResponse;
-
 import java.util.List;
-
 @Service
 public interface PostService {
     PostResponse createPost(PostRequest postRequest);
